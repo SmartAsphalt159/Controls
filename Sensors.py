@@ -10,23 +10,24 @@ class Sensors():
     def __init__(self):
         self.lidar = LidarLibrary.Lidar() #pseudocode
         self.encoder =  EncoderLibrary.Encoder() #pseudocode
-        self.rotational_speed = 0
-        self.linear_speed = 0
-        self.acceleration = 0
-        self.leading_car_list = []
+        self._rotational_speed = 0
+        self._linear_speed = 0
+        self._acceleration = 0
+        self._leading_car_list = []
 
     def update_encoder(self,delta_t):
         global wheel_radius
-        old_speed = self.linear_speed
-        self.rotational_speed = self.encoder.getSpeed() #hz #pseudocode
-        self.linear_speed = self.rotational_speed*2*math.pi*wheel_radius #m/s
-        self.acceleration = (self.linear_speed-old_speed)/delta_t
+        old_speed = self._linear_speed
+        self._rotational_speed = self.encoder.getSpeed() #hz #pseudocode
+        self._linear_speed = (self._rotational_speed * 2
+                            * math.pi * wheel_radius) #m/s
+        self._acceleration = (self._linear_speed-old_speed) / delta_t
 
     def get_rotational_speed(self):
-        return self.rotational_speed
+        return self._rotational_speed
 
     def get_linear_speed(self):
-        return self.linear_speed
+        return self._linear_speed
 
     def update_lidar(self):
         self.lidar.update() #pseudocode
@@ -36,18 +37,15 @@ class Sensors():
         lidar_point_cloud = self.lidar.get_pointcloud()#pseudocode #get in polar
         cloud_car_list = find_cars(lidar_point_cloud,
                                     self.lidar.angular_resolution) #pseudocode
-        if can_see_car()
-            and not self.leading_car_list:
-        self.leading_car_list.append(LeadingCar())
+        if can_see_car() and not self._leading_car_list:
+            self._leading_car_list.append(LeadingCar())
 
 
 """given point cloud from lidar return lists of where it thinks a car is"""
 def find_cars(point_cloud, ang_res):
     cloud_car_list = []
     threshold = 15 #cm #what threshold should be used to find edges
-    sobel = [   #can change to other operators
-        -1, 0, 1
-    ]
+    sobel = [-1, 0, 1]  #can change to other operators
 
     for i in point_cloud:
         if i > filter_distance:

@@ -40,6 +40,8 @@ class Sensors():
         if can_see_car() and not self._leading_car_list:
             self._leading_car_list.append(LeadingCar())
 
+            #return direction of leading car, relative velocity of leading car
+            #relative position of leading car,
 
 """given point cloud from lidar return lists of where it thinks a car is"""
 def find_cars(point_cloud, ang_res):
@@ -69,6 +71,17 @@ def find_cars(point_cloud, ang_res):
     """loop through and find possible cars using machine vision"""
     return cloud_car_list
 
+class lidar_measurements():
+    def __init__(self, time, dirction, location, point_cloud, list, last, next):
+        self.time = time
+        self.direction = direction #(x,y) touple vector from origin
+        self.location = location #(x,y) touple vector from origin
+        self.point_cloud = point_cloud
+        self.list = list
+        self.last = last
+        self.next = None
+
+    def add_next(self, next):
 
 
 class LeadingCar():

@@ -14,6 +14,14 @@ class Sensors():
         self._linear_speed = 0
         self._acceleration = 0
         self._leading_car_list = []
+        self.status = (True, True, True) #Encoder , lidar, comms
+        self.sensor_override = False    #To artificially make sensor fail
+
+    #overrides sensor check to test ability when sensors are malfunctioning
+    def override_sensor(self, enc, lid, com):
+        self.sensor_override = True
+        self.status = (enc, lid, com)
+
 
     def update_encoder(self,delta_t):
         global wheel_radius

@@ -1,4 +1,4 @@
-8import time
+import time
 import Sensors
 
 class ThrottleController():
@@ -65,8 +65,8 @@ class ThrottleController():
 
         modifier = (1/self.I)
         sum = 0
-
-        for x,(pid,t) in self._pid_list:    #reiman sum of distance between vehicles
+"""change taking from wrong side"""
+        for x,(pid,t) in enumerate(self._pid_list):    #reiman sum of distance between vehicles
             sum += pid * (t - self._pid_list[x][1])   #calculate deltat * pid val
 
         i_val = sum * modifier
@@ -76,7 +76,7 @@ class ThrottleController():
     def derivative(self):
         if not self._pid_list:
             return 0
-
+"""change taking from wrong side"""
         d_val = (self._pid_list[-1][0]-self._pid_list[-2][0])
                 /(self._pid_list[-1][1]-self._pid_list[-2][1])
         d_val =* self.D

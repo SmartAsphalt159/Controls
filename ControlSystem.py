@@ -1,5 +1,6 @@
 import time
 import Sensors
+import math
 
 class ThrottleController():
     def __init__(self, p = 1, i = 1, d = 1, k = 1, sensors, motor):
@@ -199,14 +200,44 @@ class SteeringController():
 
 
 class CarPhysics:
-    """Car config here"""
-    s = 16   #distance from center of front wheels
-    j = 12   #distance between king pins
-    r0 = 1  #distance from pin to center of wheel
-    Ijt = 8 #front to back axel
 
     """calculations made with equations from
     https://www.engineersedge.com/calculators/
     vehicle_turning_circle_design_14730.htm"""
+
+    S = 16          #distance from center of front wheels
+    R0 = 1.5        #distance from king pin access to the center of the contact patch
+    J = 12          #distance between king pins
+    WHEELBASE = 8         #Wheelbase (center front to center back)
+
+    """ Estimate position based on current vehicle state """
+    #Input: Steering angle [-90, 90] degrees and speed
+    #Output: Relative position 
     @staticmethod
-    def
+    def calc_position(steering, speed, sample_time):
+        
+        modifier = 1
+        #going straight
+        if(steering == 0):
+            return 0, speed*sample_time 
+        elif(steering < 0):
+            modifier = -1
+
+        #calculate inner and out radii
+        outer_r = WHEELBASE / math.sin(steering)  
+        inner_r = WHEELBASE / math.tan(steering)
+        radius_avg = (outer_r + inner_r) / 2
+
+        #calculate arc length
+        arc_len_outer = 2*math.pi*outer_r*(steering / 360)
+        arc_len_inner = 2*math.pi*inner_r*(steering / 360)
+
+        #estimating arc length belonging to the center of vehicle
+        arc_len_avg = (arc_len_outer + arc_len_inner) / 2
+
+        rot = arc_len_average / 2*math.pi*arc_len_outer
+
+         
+
+
+
